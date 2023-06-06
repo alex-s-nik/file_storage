@@ -1,6 +1,8 @@
+import uuid
+
 from fastapi import Depends
 from fastapi_users import (
-    BaseUserManager, FastAPIUsers, IntegerIDMixin
+    BaseUserManager, FastAPIUsers, UUIDIDMixin
 )
 from fastapi_users.authentication import (
     AuthenticationBackend, BearerTransport, JWTStrategy
@@ -30,14 +32,14 @@ auth_backend = AuthenticationBackend(
 )
 
 
-class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
+class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     pass
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):
     yield UserManager(user_db)
 
-fastapi_users = FastAPIUsers[User, int](
+fastapi_users = FastAPIUsers[User, uuid.UUID](
     get_user_manager,
     [auth_backend],
 )
