@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -38,9 +38,12 @@ async def files_upload(
 ):
     """Загрузить файлы в сервис"""
     try:
-        upload_file_to_service(file, user, session)
-    except Exception:
-        return {"message": "There was an error uploading the file"}
+        await upload_file_to_service(path, file, user, session)
+    except Exception as e:
+        raise HTTPException(
+            status_code=403,
+            detail={"message": f"There was an error uploading the file - {e}"}
+        )
 
     return {"message": f"Successfuly uploaded {file.filename}"}
 
