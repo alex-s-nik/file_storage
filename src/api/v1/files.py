@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -15,7 +15,6 @@ router = APIRouter()
 @router.get(
     '',
     summary='Информация о загруженных файлах',
-    dependencies=[Depends(current_user)]
 )
 async def get_info(
     user: User = Depends(current_user),
@@ -28,11 +27,10 @@ async def get_info(
 @router.post(
     '/upload',
     summary='Загрузить файл',
-    dependencies=[Depends(current_user)]
 )
 async def files_upload(
-    path: str,
-    file: UploadFile = File(...),
+    path: str = Form(),
+    file: UploadFile = File(),
     user: User = Depends(current_user),
     session: AsyncSession = Depends(get_async_session)
 ):
@@ -51,7 +49,6 @@ async def files_upload(
 @router.get(
     '/download',
     summary='Скачать файлы',
-    dependencies=[Depends(current_user)]
 )
 async def files_download(
     path: str,

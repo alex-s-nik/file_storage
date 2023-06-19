@@ -9,7 +9,7 @@ async def test_unauthorized_file_upload():
         response = await ac.post(
             '/files/upload',
             files={'my_text_file.txt': b'12345'},
-            data={'path': '/'}
+            data={'path': 'mydir'}
         )
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
