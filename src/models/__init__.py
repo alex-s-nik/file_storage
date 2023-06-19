@@ -1,2 +1,2 @@
-from .files import File
-from .users import User
+from .files import File  # noqa
+from .users import User  # noqa

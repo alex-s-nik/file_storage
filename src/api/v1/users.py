@@ -1,9 +1,6 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter
 
-from core.user import auth_backend, current_user, fastapi_users
-from db.db import get_async_session
-from models.users import User
+from core.user import auth_backend, fastapi_users
 from schemas.users import UserCreate, UserRead, UserUpdate
 
 

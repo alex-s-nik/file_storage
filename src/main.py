@@ -3,7 +3,6 @@ from fastapi import FastAPI
 
 from api.v1 import router
 
-from core import config
 from core.config import app_settings
 
 
