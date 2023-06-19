@@ -9,7 +9,7 @@ logging_config.dictConfig(LOGGING)
 
 BASE_DIR = Path(__file__).resolve()
 
-UPLOAD_DIR = BASE_DIR.parent / 'uploads'
+UPLOAD_DIR = BASE_DIR.parent.parent / 'uploads'
 ENV_FILE = BASE_DIR.parent.parent.parent / '.env'
 
 

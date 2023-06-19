@@ -13,8 +13,12 @@ from schemas.files import FileCreate, FileInDB
 
 
 async def upload_file_to_service(path: str, file: UploadFile, user: User, session: AsyncSession):
-    abs_path = AsyncPath(UPLOAD_DIR, user.id, path, file.filename)
-    async with aiofiles.open(abs_path, 'wb') as f:
+    abs_path = AsyncPath(UPLOAD_DIR, str(user.id), path.strip('/').strip('\\'))
+    full_filename = AsyncPath(abs_path, file.filename)
+    if not await abs_path.exists():
+        await abs_path.mkdir(parents=True, exist_ok=True)
+
+    async with aiofiles.open(full_filename, 'wb') as f:
         while contents := await file.read(1024 * 1024):
             await f.write(contents)
     # mark about this action in db
@@ -25,7 +29,7 @@ async def upload_file_to_service(path: str, file: UploadFile, user: User, sessio
         user_id=user.id
     ).dict()
 
-    db_record = FileInDB(**uploaded_file_record)
+    db_record = File(**uploaded_file_record)
     session.add(db_record)
     await session.commit()
 
@@ -44,7 +48,7 @@ async def get_file_path_name(
     user: User,
     session: AsyncSession
 ) -> tuple[AsyncPath, str]:
-    path = AsyncPath(UPLOAD_DIR, user.id, filepath)
+    path = AsyncPath(UPLOAD_DIR, str(user.id), filepath)
     if not (await path.exists()):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     filename = filepath.split('/')[-1]
