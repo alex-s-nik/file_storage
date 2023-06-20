@@ -19,8 +19,8 @@ async def upload_file_to_service(path: str, file: UploadFile, user: User, sessio
     if not await abs_path.exists():
         await abs_path.mkdir(parents=True, exist_ok=True)
 
-    # тут не понял замечания, либо я неправильно понимаю как будет 
-    # работать этот код. Моя идея (с помощью SoF) загружаем данные файла чанками 
+    # тут не понял замечания, либо я неправильно понимаю как будет
+    # работать этот код. Моя идея (с помощью SoF) загружаем данные файла чанками
     # по 1Mb и сразу записываем этот чанк в файл на диске.
     async with aiofiles.open(full_filename, 'wb') as f:
         while contents := await file.read(1024 * 1024):
