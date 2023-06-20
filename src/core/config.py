@@ -16,6 +16,7 @@ ENV_FILE = BASE_DIR.parent.parent.parent / '.env'
 class AppSettings(BaseSettings):
     app_title: str = "FileShareApp"
     database_dsn: PostgresDsn
+    test_database_dsn: PostgresDsn
     engine_echo: bool = Field(True, env='ENGINE_ECHO')
     project_name: str = Field('file_uploader', env='PROJECT_NAME')
     project_host: str = Field('0.0.0.0', env='PROJECT_HOST')
