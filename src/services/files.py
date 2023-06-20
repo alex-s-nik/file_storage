@@ -13,7 +13,8 @@ from schemas.files import FileCreate, FileInDB
 
 
 async def upload_file_to_service(path: str, file: UploadFile, user: User, session: AsyncSession):
-    abs_path = AsyncPath(UPLOAD_DIR, str(user.id), path.strip('/').strip('\\'))
+    path = path.strip('/').strip('\\')
+    abs_path = AsyncPath(UPLOAD_DIR, str(user.id), path)
     full_filename = AsyncPath(abs_path, file.filename)
     if not await abs_path.exists():
         await abs_path.mkdir(parents=True, exist_ok=True)
