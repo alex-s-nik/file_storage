@@ -5,7 +5,7 @@ services:
     env_file:
       - ./.env
     expose:
-      - "5432"
+      - "${POSTGRES_PORT:-5432}"
     volumes:
       - /var/lib/postgresql/data/
   backend:
@@ -15,14 +15,14 @@ services:
       - ./.env
     command: sh -c "
             alembic upgrade head
-            && python main.py
+            && python -m gunicorn --name file_uploader -k uvicorn.workers.UvicornWorker -w 1 -b 0.0.0.0:8000 src.main:app
             "
     depends_on:
       - db
   nginx:
     image: nginx:1.19.3
     ports:
-      - "80:80"
+      - "${APP_PUBLIC_PORT:-80}:80"
     volumes:
       - ./services/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
