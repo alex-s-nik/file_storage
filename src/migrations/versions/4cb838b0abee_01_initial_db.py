@@ -1,17 +1,16 @@
 """01_initial-db
 
-Revision ID: d4440bb88ba2
+Revision ID: 4cb838b0abee
 Revises: 
-Create Date: 2023-06-19 09:11:46.469349
+Create Date: 2023-06-20 11:36:37.604361
 
 """
 from alembic import op
-import fastapi_users_db_sqlalchemy
 import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd4440bb88ba2'
+revision = '4cb838b0abee'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -38,7 +37,8 @@ def upgrade() -> None:
     sa.Column('is_downloadable', sa.Boolean(), nullable=False),
     sa.Column('user_id', sa.UUID(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name', 'path', name='unique_filename')
     )
     # ### end Alembic commands ###
 
